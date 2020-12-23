@@ -7,6 +7,7 @@ $(document).ready(function() {
         console.log(contractInstance);
     });
     $("#add_data_button").click(inputData);
+    $("#get_data_button").click(outputData);
 });
 
 function inputData() {
@@ -17,15 +18,25 @@ function inputData() {
     
     // Metamask signing params
     var sendConfig = {
-        //value: web3.utils.toWei("1", "ether")
-        value: 1e18
+        value: web3.utils.toWei("1", "ether")
     };
 
-    console.log("name: " + name);
-    console.log("age: " + age);
-    console.log("height: " + height);
-    console.log("config: " + JSON.stringify(sendConfig));
-
     // Let Metamask send the transaction
-    contractInstance.methods.createPerson(name, age, height).send(sendConfig);
+    contractInstance.methods.createPerson(name, age, height).send(sendConfig)
+        // Gett the tx hash
+        .on("transactionHash", function(hash) {
+            console.log("Tx hash: " + hash);
+        })
+        // Get tx confirmations, min 12 recommended for mainnet
+        .on("confirmation", function(confirmationNr) {
+            console.log("Confimations: " + confirmationNr);
+        })
+        // Get tx receipt, outcome & state changes of the tx
+        .on("receipt", function(receipt) {
+            console.log("Receipt: " + JSON.stringify(receipt));
+        });
+}
+
+function outputData() {
+
 }
