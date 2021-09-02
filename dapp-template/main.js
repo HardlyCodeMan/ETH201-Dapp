@@ -46,7 +46,6 @@ function fetchAndDisplay() {
         $("#name_output").text(result.name);
         $("#age_output").text(result.age);
         $("#height_output").text(result.height);
-
     })
 }
     
